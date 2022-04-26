@@ -12,13 +12,13 @@ output:
       collapsed: yes
   pdf_document:
     toc: yes
-subtitle: Análise de dados + criação de um modelo de machine learningcom redes neurais e random forest para detecção de cliques fraudulentos.
+subtitle: Análise de dados + criação de um modelo de machine learning com redes neurais e random forest, para detecção de cliques fraudulentos.
 ---
 # Introdução:  Motivação, objetivo, carregamento dos dados e análise exploratória inicial
 OBS: Este projeto é baseado em um competição do Kaggle. Os datasets estão presentes em https://www.kaggle.com/competitions/talkingdata-adtracking-fraud-detection/data. Todo o trabalho foi realizado em linguagem R e o relatório final foi obtido através do Rmarkdown.
 
 ## Objetivo
-   Analisar os dados disponibilizados pela empres Talkingdata e criar um modelo de machine learning que determinará se um clique é fraudulento ou não, usando redes neurais e random forest.
+   Analisar os dados disponibilizados pela empresa Talkingdata e criar um modelo de machine learning que determinará se um clique é fraudulento ou não, usando redes neurais e random forest.
 
 ## Motivação
 
