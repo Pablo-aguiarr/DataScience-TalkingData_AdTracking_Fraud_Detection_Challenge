@@ -1,0 +1,27 @@
+---
+title: "Pablo Aguiar Raposo"
+output: html_document
+---
+
+<style type="text/css">
+.title {
+  display: none;
+}
+
+#getting-started img {
+  margin-right: 10px;
+}
+
+</style>
+
+<div class="row" style="padding-top: 30px;">
+<div class="col-sm-6">
+
+# ** TalkingData AdTracking Fraud Detection  **
+
+   Olá! Meu nome é Pablo e na outra aba você encontra meu projeto. esse é um projeto que fiz baseado em uma competição do Kaggle, onde usamos machine learning para classificação. Minhas redes estão no final do relatório, entre em contato!
+
+![Kaggle and TalkingData logo](images/talkingdata.png)
+
+
+

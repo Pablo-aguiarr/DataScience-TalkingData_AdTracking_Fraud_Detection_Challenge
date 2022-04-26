@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Pablo Aguiar Raposo" />
+
+
+<title>TalkingData AdTracking Fraud Detection Challenge</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pablo Aguiar Raposo</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="TalkingData_Challenge.html">TalkingData_Challenge</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">TalkingData AdTracking Fraud Detection Challenge</h1>
+<h3 class="subtitle">Análise de dados + criação de um modelo de machine learningcom redes neurais e random forest para detecção de cliques fraudulentos.</h3>
+<h4 class="author">Pablo Aguiar Raposo</h4>
+<h4 class="date">30/04/2022</h4>
+
+</div>
+
+
+<div id="introdução-motivação-objetivo-carregamento-dos-dados-e-análise-exploratória-inicial" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introdução: Motivação, objetivo, carregamento dos dados e análise exploratória inicial</h1>
+<p>OBS: Este projeto é baseado em um competição do Kaggle. Os datasets estão presentes em <a href="https://www.kaggle.com/competitions/talkingdata-adtracking-fraud-detection/data" class="uri">https://www.kaggle.com/competitions/talkingdata-adtracking-fraud-detection/data</a>. Todo o trabalho foi realizado em linguagem R e o relatório final foi obtido através do Rmarkdown.</p>
+<div id="objetivo" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Objetivo</h2>
+<p>Analisar os dados disponibilizados pela empres Talkingdata e criar um modelo de machine learning que determinará se um clique é fraudulento ou não, usando redes neurais e random forest.</p>
+</div>
+<div id="motivação" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Motivação</h2>
+<p>O risco de fraude está em toda parte, mas para as empresas que anunciam online, a fraude de cliques pode acontecer em um volume avassalador, resultando em dados de cliques enganosos e dinheiro desperdiçado. Os canais de anúncios podem aumentar os custos simplesmente quando pessoas ou bots clicam nos anúncios em grande escala, o que na prática não gera o resultado esperado. Com mais de 1 bilhão de dispositivos móveis em uso todos os meses, a China é o maior mercado móvel do mundo e, portanto, sofre com grandes volumes de tráfego fraudulento. Neste projeto, utilizaremos um dataset disponibilizado pela empresa Talkingdata, para construir uma análise de dados e um modelo de machine learning que classifica um clique como sendo fraudulento ou não.</p>
+</div>
+<div id="datasets-utilizados" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Datasets utilizados:</h2>
+<p>train_sample: Amostra do conjunto com os dados históricos fornecidos. Usaremos uma amostra aleatória com 200 mil registros, por limitações de hardware, o que diminuirá a perfomance do modelo preditivo, porém não fará diferença para fins didáticos.</p>
+</div>
+<div id="dicionário-de-dados" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Dicionário de dados:</h2>
+<div id="ip-endereço-de-ip-do-clique" class="section level3" number="1.4.1">
+<h3><span class="header-section-number">1.4.1</span> ip: endereço de IP do clique;</h3>
+</div>
+<div id="app-id-do-aplicativo-usado-no-marketing" class="section level3" number="1.4.2">
+<h3><span class="header-section-number">1.4.2</span> app: ID do aplicativo usado no marketing;</h3>
+</div>
+<div id="device-id-do-tipo-de-aparelho-utilizado" class="section level3" number="1.4.3">
+<h3><span class="header-section-number">1.4.3</span> device: ID do tipo de aparelho utilizado;</h3>
+</div>
+<div id="os-versão-do-sistema-operacional-do-aparelho" class="section level3" number="1.4.4">
+<h3><span class="header-section-number">1.4.4</span> os: Versão do sistema operacional do aparelho;</h3>
+</div>
+<div id="channel-id-do-canal-do-anuciante" class="section level3" number="1.4.5">
+<h3><span class="header-section-number">1.4.5</span> channel: ID do canal do anuciante</h3>
+</div>
+<div id="click_time-horário-de-clique-utc" class="section level3" number="1.4.6">
+<h3><span class="header-section-number">1.4.6</span> click_time: Horário de clique (UTC)</h3>
+</div>
+<div id="attributed_time-se-o-usuário-fez-o-download-do-app-o-horário-em-que-foi-feito-esse-download" class="section level3" number="1.4.7">
+<h3><span class="header-section-number">1.4.7</span> attributed_time: Se o usuário fez o download do app, o horário em que foi feito esse download</h3>
+</div>
+<div id="is_attributed-variável-a-ser-prevista-indica-se-o-app-foi-baixado1-ou-não0." class="section level3" number="1.4.8">
+<h3><span class="header-section-number">1.4.8</span> is_attributed: Variável a ser prevista, indica se o app foi baixado(1) ou não(0).</h3>
+</div>
+</div>
+<div id="carregando-pacotes-utilizados-no-projeto" class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> Carregando pacotes utilizados no projeto</h2>
+<pre class="r"><code>library(ggplot2)
+library(neuralnet)
+library(caret)
+library(dplyr)
+library(randomForest)
+library(data.table)
+library(knitr)</code></pre>
+</div>
+<div id="carregando-dados" class="section level2" number="1.6">
+<h2><span class="header-section-number">1.6</span> Carregando dados</h2>
+<pre class="r"><code>data &lt;- fread(&quot;train_sample.csv&quot;, header = T)</code></pre>
+</div>
+<div id="seed" class="section level2" number="1.7">
+<h2><span class="header-section-number">1.7</span> seed</h2>
+<pre class="r"><code>set.seed(15)</code></pre>
+</div>
+<div id="visualizando-os-dados" class="section level2" number="1.8">
+<h2><span class="header-section-number">1.8</span> Visualizando os dados</h2>
+<pre class="r"><code>str(data)</code></pre>
+<pre><code>## Classes &#39;data.table&#39; and &#39;data.frame&#39;:   100000 obs. of  8 variables:
+##  $ ip             : int  87540 105560 101424 94584 68413 93663 17059 121505 192967 143636 ...
+##  $ app            : int  12 25 12 13 12 3 1 9 2 3 ...
+##  $ device         : int  1 1 1 1 1 1 1 1 2 1 ...
+##  $ os             : int  13 17 19 13 1 17 17 25 22 19 ...
+##  $ channel        : int  497 259 212 477 178 115 135 442 364 135 ...
+##  $ click_time     : POSIXct, format: &quot;2017-11-07 09:30:38&quot; &quot;2017-11-07 13:40:27&quot; ...
+##  $ attributed_time: POSIXct, format: NA NA ...
+##  $ is_attributed  : int  0 0 0 0 0 0 0 0 0 0 ...
+##  - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
+<pre class="r"><code>kable(head(data))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">ip</th>
+<th align="right">app</th>
+<th align="right">device</th>
+<th align="right">os</th>
+<th align="right">channel</th>
+<th align="left">click_time</th>
+<th align="left">attributed_time</th>
+<th align="right">is_attributed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">87540</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">497</td>
+<td align="left">2017-11-07 09:30:38</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">105560</td>
+<td align="right">25</td>
+<td align="right">1</td>
+<td align="right">17</td>
+<td align="right">259</td>
+<td align="left">2017-11-07 13:40:27</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">101424</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">19</td>
+<td align="right">212</td>
+<td align="left">2017-11-07 18:05:24</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">94584</td>
+<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">477</td>
+<td align="left">2017-11-07 04:58:08</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">68413</td>
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">178</td>
+<td align="left">2017-11-09 09:00:09</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">93663</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">17</td>
+<td align="right">115</td>
+<td align="left">2017-11-09 01:22:13</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>A coluna ‘attributed_time’ possui grande quantidade de valores NA, pois ela só está presente quando o download do app é relaizado.</p>
+<div id="checando-a-existência-de-valores-na-para-outras-variáveis" class="section level4" number="1.8.0.1">
+<h4><span class="header-section-number">1.8.0.1</span> Checando a existência de valores NA para outras variáveis</h4>
+<pre class="r"><code>sum(is.na(data[,-&#39;attributed_time&#39;]))</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="verificando-se-existe-algum-erro-com-as-variáveis-temporais-verificando-se-existe-registro-de-algum-download-ocorrendo-antes-do-click-na-propaganda" class="section level4" number="1.8.0.2">
+<h4><span class="header-section-number">1.8.0.2</span> Verificando se existe algum erro com as variáveis temporais, verificando se existe registro de algum download ocorrendo antes do click na propaganda</h4>
+<pre class="r"><code>x = data %&gt;% filter(click_time - attributed_time &gt; 0)
+nrow(x)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>Podemos perceber que está tudo correto.</p>
+</div>
+</div>
+</div>
+<div id="data-munging" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Data munging</h1>
+<div id="checando-através-de-um-plot-a-quantidade-de-valores-únicos-de-cada-uma-das-variáveis." class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Checando através de um plot a quantidade de valores únicos de cada uma das variáveis.</h2>
+<pre class="r"><code>unique_values &lt;- data[,-c(&#39;click_time&#39;,&#39;attributed_time&#39;)]
+unique_values &lt;- as.data.frame(apply(unique_values, 2, function(x) length(unique(x))))
+unique_values$names &lt;- rownames(unique_values)
+colnames(unique_values) &lt;- c(&#39;valores_unicos&#39;,&#39;variavel&#39;)
+unique_values &lt;- unique_values %&gt;% arrange(desc(valores_unicos))
+
+ggplot(unique_values, aes( x=reorder(variavel,-valores_unicos),valores_unicos)) +
+  geom_bar(position=&#39;dodge&#39;, stat=&#39;identity&#39;,fill = &quot;blue&quot;) + 
+  geom_text(aes(label=valores_unicos), position=position_dodge(width=0.9), vjust=-0.25)</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Podemos perceber uma enorme quantidade de IPs únicos. Importante notar que a variável que iremos prever possui apenas 2 valores únicos, que é o comportamento esperado.</p>
+</div>
+<div id="balanceamento-de-variável" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Balanceamento de variável</h2>
+<p>Em problemas de classificação, é importante que a variável a ser prevista esteja balanceada, ou seja, a quantidade de valores 0 e de valores 1 em ‘is_attributed’ deve ser parecida.</p>
+<div id="vamos-plotar-essas-quantidades" class="section level5" number="2.2.0.0.1">
+<h5><span class="header-section-number">2.2.0.0.1</span> Vamos plotar essas quantidades</h5>
+<pre class="r"><code>ggplot(data, aes(is_attributed)) + geom_bar(fill = &#39;cornsilk2&#39;) +
+  stat_count(geom = &quot;text&quot;, colour = &quot;black&quot;, size = 5,
+             aes(label = ..count..),position=position_stack(vjust=0.5))</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Percebemos uma enorme necessidade de balancear os dados.Podemos fazer isso reduzindo nossa amostra onde ‘is_attributed’ for 0 ou criando dados em que ‘is_attributed’ é 1. Como temos acesso a uma quantidade muito grande de dados, usaremos uma técnica de downsample</p>
+<pre class="r"><code>yes &lt;- which(data$is_attributed == 1)
+no &lt;- which(data$is_attributed == 0)
+not_downloaded_sample &lt;- sample(no, length(yes))
+data = data[c(not_downloaded_sample,yes),]</code></pre>
+</div>
+<div id="verificando" class="section level3" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Verificando</h3>
+<pre class="r"><code>ggplot(data, aes(is_attributed)) + geom_bar(fill = &#39;cornsilk2&#39;) +
+  stat_count(geom = &quot;text&quot;, colour = &quot;black&quot;, size = 5,
+             aes(label = ..count..),position=position_stack(vjust=0.5))</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Agora sim a variável target está balanceada.</p>
+</div>
+</div>
+<div id="criando-coluna-com-dia-da-semana-e-horário-do-clique" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Criando coluna com dia da semana e horário do clique</h2>
+<pre class="r"><code>data$dayweek =  wday(data$click_time)
+data$hour = hour(data$click_time)</code></pre>
+<pre class="r"><code>kable(head(data[,c(&#39;click_time&#39;,&#39;dayweek&#39;,&#39;hour&#39;)]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">click_time</th>
+<th align="right">dayweek</th>
+<th align="right">hour</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2017-11-09 01:27:11</td>
+<td align="right">5</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">2017-11-07 19:14:02</td>
+<td align="right">3</td>
+<td align="right">19</td>
+</tr>
+<tr class="odd">
+<td align="left">2017-11-08 06:39:30</td>
+<td align="right">4</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">2017-11-07 11:03:39</td>
+<td align="right">3</td>
+<td align="right">11</td>
+</tr>
+<tr class="odd">
+<td align="left">2017-11-07 11:48:26</td>
+<td align="right">3</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">2017-11-08 02:38:46</td>
+<td align="right">4</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="análise---quem-fez-o-download-do-app" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Análise - quem fez o download do app</h1>
+<div id="criando-subset-apenas-com-os-dados-dos-que-baixaram-o-appdata2" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Criando subset apenas com os dados dos que baixaram o app(data2)</h2>
+<pre class="r"><code>data2 = subset(data, data$is_attributed == 1)</code></pre>
+</div>
+<div id="análise-média-de-tempo-levado-para-download-do-app" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Análise: média de tempo levado para download do app</h2>
+<pre class="r"><code>data2$delay = as.numeric(data2$attributed_time - data2$click_time)</code></pre>
+<pre class="r"><code>mean(data2$delay/60)</code></pre>
+<pre><code>## [1] 74.99288</code></pre>
+<pre class="r"><code>sd(data2$delay/60)</code></pre>
+<pre><code>## [1] 145.0899</code></pre>
+<pre class="r"><code>hist(data2$delay, breaks = 10, col = &#39;lightblue&#39;)</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<div id="considerando-pessoas-que-demoraram-menos-de-10min600s" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Considerando pessoas que demoraram menos de 10min(600s)</h3>
+<pre class="r"><code>delay_under10 = subset(data2, select = delay, subset = delay&lt;600 )
+mean(delay_under10$delay/60)</code></pre>
+<pre><code>## [1] 1.780224</code></pre>
+<pre class="r"><code>sd(delay_under10$delay/60)</code></pre>
+<pre><code>## [1] 1.927303</code></pre>
+<pre class="r"><code>hist(delay_under10$delay, breaks = 10, col = &#39;lightblue&#39;)</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="de-pessoas-que-baixaram-o-app" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> % de pessoas que baixaram o app</h3>
+<pre class="r"><code>a = nrow(data2) 
+b = nrow(data)
+a/b*100</code></pre>
+<pre><code>## [1] 50</code></pre>
+</div>
+<div id="de-pessoas-que-baixaram-o-app-em-menos-de-2-minutos120s" class="section level3" number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> % de pessoas que baixaram o app em menos de 2 minutos(120s)</h3>
+<pre class="r"><code>c = subset(data2, subset = data2$delay &lt; 120)
+d = nrow(c)
+d/a*100</code></pre>
+<pre><code>## [1] 42.73128</code></pre>
+</div>
+<div id="concluímos-que-das-pessoas-que-baixaram-o-app-42.7312775-o-fizeram-em-menos-de-2-minutos-apesar-da-média-ser-de-74.9928781-minutos." class="section level3" number="3.2.4">
+<h3><span class="header-section-number">3.2.4</span> Concluímos que, das pessoas que baixaram o app, 42.7312775 o fizeram em menos de 2 minutos, apesar da média ser de 74.9928781 minutos.</h3>
+</div>
+</div>
+<div id="descobrindo-quantos-dias-estão-presentes-no-nosso-dataset" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Descobrindo quantos dias estão presentes no nosso dataset</h2>
+<pre class="r"><code>max(data$click_time) - min(data$click_time)</code></pre>
+<pre><code>## Time difference of 2.943634 days</code></pre>
+</div>
+<div id="criando-um-gráfico-que-mostra-o-horário-do-click-em-uma-propaganda-comparando-quem-fez-o-download-com-quem-não-fez." class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Criando um gráfico que mostra o horário do click em uma propaganda, comparando quem fez o download com quem não fez.</h2>
+<pre class="r"><code>data %&gt;%
+  group_by(hour) %&gt;%
+  summarise(downloadsRealized = sum(is_attributed),
+            unrealizedDownloads = sum(!is_attributed)) %&gt;%
+  ggplot(x = factor(hour)) +
+  geom_line(aes(x = hour, y = downloadsRealized, color = &#39;Sim&#39;)) +
+  geom_line(aes(x = hour, y = unrealizedDownloads, color = &#39;Não&#39;)) +
+  theme_bw(base_size = 15) + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) + 
+  xlab(&#39;Hora&#39;) +
+  ylab(&#39;Quantidade de cliques&#39;) +
+  labs(title = &#39;Análise temporal de cliques&#39;, colour = &#39;Downloaded&#39;)</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
+<div id="analizando-os-ips-que-fizeram-ou-não-o-download." class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Analizando os IPs que fizeram ou não o download.</h2>
+<div id="ips-que-fizeram-o-download" class="section level4" number="3.5.0.1">
+<h4><span class="header-section-number">3.5.0.1</span> Ips que fizeram o download:</h4>
+<pre class="r"><code>ip_downloaded = data %&gt;% select(c(&#39;ip&#39;, &#39;is_attributed&#39;)) %&gt;% filter(is_attributed == 1) %&gt;% distinct()</code></pre>
+</div>
+<div id="ips-que-não-fizeram-o-dowload" class="section level4" number="3.5.0.2">
+<h4><span class="header-section-number">3.5.0.2</span> Ips que não fizeram o dowload</h4>
+<pre class="r"><code>ip_not_donwloaded = data %&gt;% select(c(&#39;ip&#39;, &#39;is_attributed&#39;)) %&gt;% filter(is_attributed == 0) %&gt;% distinct()</code></pre>
+</div>
+<div id="ips-que-pertencem-aos-dois-grupos" class="section level4" number="3.5.0.3">
+<h4><span class="header-section-number">3.5.0.3</span> IPs que pertencem aos dois grupos</h4>
+<pre class="r"><code>ip_both = ip_downloaded %&gt;% inner_join(ip_not_donwloaded , by = &#39;ip&#39;)
+count(ip_downloaded)</code></pre>
+<pre><code>##      n
+## 1: 223</code></pre>
+<pre class="r"><code>count(ip_not_donwloaded)</code></pre>
+<pre><code>##      n
+## 1: 219</code></pre>
+<pre class="r"><code>count(ip_both)</code></pre>
+<pre><code>##    n
+## 1: 4</code></pre>
+<p>É possível perceber que uma quantidade extremamente baixa de IPs foi responsável por cliques fraudulentos e cliques não fraudulentos. Assim, percebemos que o mesmo IP costuma ter o mesmo comportamento, seja fraudar o clique ou não.</p>
+<pre class="r"><code>ip_only_downloaded = ip_downloaded %&gt;% anti_join(ip_both)</code></pre>
+<pre><code>## Joining, by = &quot;ip&quot;</code></pre>
+<pre class="r"><code>ip_only_not_downloaded = ip_not_donwloaded %&gt;% anti_join(ip_both)</code></pre>
+<pre><code>## Joining, by = &quot;ip&quot;</code></pre>
+<pre class="r"><code>total_IP = count(ip_downloaded) + count(ip_not_donwloaded) - count(ip_both)
+count(ip_only_downloaded) / total_IP *100</code></pre>
+<pre><code>##     n
+## 1: 50</code></pre>
+<pre class="r"><code>count(ip_only_not_downloaded) / total_IP *100</code></pre>
+<pre><code>##           n
+## 1: 49.08676</code></pre>
+<p>O total de Ips que nunca resultaram em cliques fraudulentos é de 50 % . Já o total que sempre resultou em clique fraudulento é de 49.086758 %</p>
+</div>
+</div>
+</div>
+<div id="feature-selection---seleção-de-variáveis-que-entrarão-no" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Feature selection - Seleção de variáveis que entrarão no</h1>
+<div id="eliminando-colunas-que-não-entrarão-no-modelo" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Eliminando colunas que não entrarão no modelo</h2>
+<pre class="r"><code>data$attributed_time = NULL
+data$click_time = NULL
+data$ip = NULL</code></pre>
+</div>
+<div id="visualisando-o-comportamento-das-variáveis-para-cada-classificação-a-ser-prevista." class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Visualisando o comportamento das variáveis para cada classificação a ser prevista.</h2>
+<div id="comparativo-horário-de-click" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Comparativo: horário de click</h3>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-26-1.png" width="50%" /></p>
+</div>
+<div id="gráfico-dia-da-semana" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Gráfico: dia da semana</h3>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-27-1.png" width="50%" /></p>
+</div>
+<div id="gráfico-app" class="section level3" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Gráfico: app</h3>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-28-1.png" width="50%" /></p>
+</div>
+<div id="gráfico-dispositivo" class="section level3" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> Gráfico: dispositivo</h3>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-29-1.png" width="50%" /></p>
+</div>
+<div id="gráfico-sistema-operacional" class="section level3" number="4.2.5">
+<h3><span class="header-section-number">4.2.5</span> Gráfico: sistema operacional</h3>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-30-1.png" width="50%" /></p>
+</div>
+<div id="gráfico-canal" class="section level3" number="4.2.6">
+<h3><span class="header-section-number">4.2.6</span> Gráfico: canal</h3>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-31-1.png" width="50%" /></p>
+</div>
+</div>
+<div id="feature-selection-com-random-forest" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Feature selection com random forest</h2>
+<pre class="r"><code>selection &lt;- randomForest(is_attributed ~.,
+                          data       = data, 
+                         ntree = 100, nodesize = 10, importance = T)</code></pre>
+<pre><code>## Warning in randomForest.default(m, y, ...): The response has five or fewer
+## unique values. Are you sure you want to do regression?</code></pre>
+<pre class="r"><code>varImpPlot(selection)</code></pre>
+<p><img src="TalkingData_Challenge_RMARKDOWN_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p>A partir do modelo de random forest e da visualização dos gráficos, determinou-se como variáveis fracas: day_week e hour</p>
+</div>
+<div id="criação-datasetdata_3-sem-as-variáveis-fracas-para-testar-nos-modelos" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Criação dataset(data_3) sem as variáveis fracas, para testar nos modelos</h2>
+<pre class="r"><code>data_3 = data
+data_3$dayweek = NULL
+data_3$hour =NULL</code></pre>
+</div>
+</div>
+<div id="criação-dos-modelos-de-machine-learning" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Criação dos modelos de machine learning</h1>
+<div id="modelo-1-rede-neuralnn" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Modelo 1 :Rede Neural(NN)</h2>
+<pre class="r"><code>data_nn &lt;- data</code></pre>
+<div id="divisão-dados-treino-e-teste" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Divisão dados treino e teste</h3>
+<pre class="r"><code>sample &lt;- sample.int(n = nrow(data_nn), size = floor(.7*nrow(data_nn)), replace = F)
+train_sample_nn &lt;- data_nn[sample, ]
+test_sample_nn  &lt;- data_nn[-sample, ]</code></pre>
+</div>
+<div id="criação-do-modelo-1" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Criação do modelo 1</h3>
+<pre class="r"><code>modelo_1 = neuralnet(is_attributed ~., train_sample_nn , hidden = 3)
+plot(modelo_1)</code></pre>
+</div>
+<div id="previsões" class="section level3" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Previsões</h3>
+<pre class="r"><code>previsoes &lt;- data.frame(observado = test_sample_nn$is_attributed,
+                        previsto = predict(modelo_1, newdata = test_sample_nn))
+
+previsoes$previsto &lt;- ifelse (previsoes$previsto &gt; 0.5, 1, 0)</code></pre>
+</div>
+<div id="confusion-matrix---avaliando-a-performance-do-modelo" class="section level3" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Confusion matrix - avaliando a performance do modelo</h3>
+<pre class="r"><code>confusionMatrix(table(previsoes$observado, previsoes$previsto))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##    
+##      0  1
+##   0 72  1
+##   1 49 15
+##                                           
+##                Accuracy : 0.635           
+##                  95% CI : (0.5485, 0.7156)
+##     No Information Rate : 0.8832          
+##     P-Value [Acc &gt; NIR] : 1               
+##                                           
+##                   Kappa : 0.2314          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 2.995e-11       
+##                                           
+##             Sensitivity : 0.5950          
+##             Specificity : 0.9375          
+##          Pos Pred Value : 0.9863          
+##          Neg Pred Value : 0.2344          
+##              Prevalence : 0.8832          
+##          Detection Rate : 0.5255          
+##    Detection Prevalence : 0.5328          
+##       Balanced Accuracy : 0.7663          
+##                                           
+##        &#39;Positive&#39; Class : 0               
+## </code></pre>
+</div>
+</div>
+<div id="modelo-2-rede-neural-com-menos-parâmetros" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Modelo 2: rede neural com menos parâmetros</h2>
+<pre class="r"><code>data_nn_2 &lt;- data_3
+
+
+sample &lt;- sample.int(n = nrow(data_nn_2), size = floor(.7*nrow(data_nn_2)), replace = F)
+train_sample_nn_2 &lt;- data_nn_2[sample, ]
+test_sample_nn_2  &lt;- data_nn_2[-sample, ]</code></pre>
+<div id="criação-do-modelo-2" class="section level3" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Criação do modelo 2</h3>
+<pre class="r"><code>modelo_2 = neuralnet(is_attributed ~., train_sample_nn_2 , hidden = 3  )
+
+#previsões
+previsoes2 &lt;- data.frame(observado = test_sample_nn_2$is_attributed,
+                        previsto = predict(modelo_2, newdata = test_sample_nn_2))
+
+previsoes2$previsto &lt;- ifelse (previsoes2$previsto &gt; 0.5, 1, 0)</code></pre>
+</div>
+<div id="confusion-matrix" class="section level3" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Confusion matrix</h3>
+<pre class="r"><code>confusionMatrix(table(previsoes2$observado, previsoes2$previsto))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##    
+##      0  1
+##   0 64  0
+##   1 64  9
+##                                           
+##                Accuracy : 0.5328          
+##                  95% CI : (0.4457, 0.6185)
+##     No Information Rate : 0.9343          
+##     P-Value [Acc &gt; NIR] : 1               
+##                                           
+##                   Kappa : 0.1161          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 3.407e-15       
+##                                           
+##             Sensitivity : 0.5000          
+##             Specificity : 1.0000          
+##          Pos Pred Value : 1.0000          
+##          Neg Pred Value : 0.1233          
+##              Prevalence : 0.9343          
+##          Detection Rate : 0.4672          
+##    Detection Prevalence : 0.4672          
+##       Balanced Accuracy : 0.7500          
+##                                           
+##        &#39;Positive&#39; Class : 0               
+## </code></pre>
+</div>
+</div>
+<div id="modelo-3---random-forest" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Modelo 3 - random forest</h2>
+<pre class="r"><code>sample &lt;- sample.int(n = nrow(data), size = floor(.7*nrow(data)), replace = F)
+train_sample &lt;- data[sample, ]
+test_sample  &lt;- data[-sample, ]
+
+modelo_3 &lt;- randomForest(is_attributed ~.,
+                          data       = train_sample, 
+                          ntree = 100, nodesize = 10)</code></pre>
+<pre><code>## Warning in randomForest.default(m, y, ...): The response has five or fewer
+## unique values. Are you sure you want to do regression?</code></pre>
+<pre class="r"><code>previsoes3 &lt;- data.frame(observado = test_sample$is_attributed,
+                         previsto = predict(modelo_3, newdata = test_sample))
+
+previsoes3$previsto &lt;- ifelse (previsoes3$previsto &gt; 0.5, 1, 0)</code></pre>
+<div id="confusion-matrix-1" class="section level3" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Confusion matrix</h3>
+<pre class="r"><code>confusionMatrix(table(previsoes3$observado, previsoes3$previsto))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##    
+##      0  1
+##   0 62  5
+##   1  6 64
+##                                           
+##                Accuracy : 0.9197          
+##                  95% CI : (0.8609, 0.9592)
+##     No Information Rate : 0.5036          
+##     P-Value [Acc &gt; NIR] : &lt;2e-16          
+##                                           
+##                   Kappa : 0.8394          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 1               
+##                                           
+##             Sensitivity : 0.9118          
+##             Specificity : 0.9275          
+##          Pos Pred Value : 0.9254          
+##          Neg Pred Value : 0.9143          
+##              Prevalence : 0.4964          
+##          Detection Rate : 0.4526          
+##    Detection Prevalence : 0.4891          
+##       Balanced Accuracy : 0.9197          
+##                                           
+##        &#39;Positive&#39; Class : 0               
+## </code></pre>
+</div>
+</div>
+<div id="modelo-4-random-forest-com-menos-parâmetros" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Modelo 4: random forest com menos parâmetros</h2>
+<pre class="r"><code>sample &lt;- sample.int(n = nrow(data_3), size = floor(.7*nrow(data_3)), replace = F)
+train_sample &lt;- data_3[sample, ]
+test_sample  &lt;- data_3[-sample, ]
+
+modelo_4 &lt;- randomForest(is_attributed ~.,
+                         data       = train_sample, 
+                         ntree = 100, nodesize = 15)</code></pre>
+<pre><code>## Warning in randomForest.default(m, y, ...): The response has five or fewer
+## unique values. Are you sure you want to do regression?</code></pre>
+<pre class="r"><code>previsoes4 &lt;- data.frame(observado = test_sample$is_attributed,
+                         previsto = predict(modelo_4, newdata = test_sample))
+
+previsoes4$previsto &lt;- ifelse (previsoes4$previsto &gt; 0.5, 1, 0)</code></pre>
+<div id="confusion-matrix-2" class="section level3" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> Confusion matrix</h3>
+<pre class="r"><code>confusionMatrix(table(previsoes4$observado, previsoes4$previsto))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##    
+##      0  1
+##   0 58  2
+##   1 16 61
+##                                           
+##                Accuracy : 0.8686          
+##                  95% CI : (0.8003, 0.9202)
+##     No Information Rate : 0.5401          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.7398          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 0.002183        
+##                                           
+##             Sensitivity : 0.7838          
+##             Specificity : 0.9683          
+##          Pos Pred Value : 0.9667          
+##          Neg Pred Value : 0.7922          
+##              Prevalence : 0.5401          
+##          Detection Rate : 0.4234          
+##    Detection Prevalence : 0.4380          
+##       Balanced Accuracy : 0.8760          
+##                                           
+##        &#39;Positive&#39; Class : 0               
+## </code></pre>
+<div id="os-modelos-de-random-forest-apresentaram-desempenho-superior-aos-de-redes-neurais-ultrapassando-90-de-acurácia." class="section level4" number="5.4.1.1">
+<h4><span class="header-section-number">5.4.1.1</span> Os modelos de random forest apresentaram desempenho superior aos de redes neurais, ultrapassando 90% de acurácia.</h4>
+</div>
+</div>
+</div>
+</div>
+<div id="dúvidas-sugestões-e-críticas-entre-em-contato" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Dúvidas, sugestões e críticas: entre em contato! :)</h1>
+<p>e-mail: <a href="mailto:pabloaguiar92@hotmail.com" class="email">pabloaguiar92@hotmail.com</a><br />
+linkedin: <a href="https://www.linkedin.com/in/pablo-aguiar-raposo-71b6b5139/" class="uri">https://www.linkedin.com/in/pablo-aguiar-raposo-71b6b5139/</a> github: <a href="https://github.com/Pablo-aguiarr" class="uri">https://github.com/Pablo-aguiarr</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
