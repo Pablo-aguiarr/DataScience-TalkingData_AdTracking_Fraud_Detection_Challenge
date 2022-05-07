@@ -10,8 +10,7 @@ output:
     toc: yes
     toc_float:
       collapsed: yes
-  pdf_document:
-    toc: yes
+
 subtitle: Análise de dados + criação de um modelo de machine learning com redes neurais e random forest, para detecção de cliques fraudulentos.
 ---
 # Introdução:  Motivação, objetivo, carregamento dos dados e análise exploratória inicial
@@ -330,9 +329,15 @@ data_3$hour =NULL
 
 ## Modelo 1 :Rede Neural(NN)
 
+Modelos de redes neurais requerem dados normalizados
 
 ``` {r}
 data_nn <- data
+min_max_norm <- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+data_nn = min_max_norm(data_nn[,-'is_attributed'])
+data_nn$is_attributed = data$is_attributed
 
 ```
 
@@ -365,6 +370,8 @@ confusionMatrix(table(previsoes$observado, previsoes$previsto))
 
 ``` {r}
 data_nn_2 <- data_3
+data_nn_2 = min_max_norm(data_nn_2[,-'is_attributed'])
+data_nn_2$is_attributed = data_3$is_attributed
 
 
 sample <- sample.int(n = nrow(data_nn_2), size = floor(.7*nrow(data_nn_2)), replace = F)
@@ -389,6 +396,8 @@ confusionMatrix(table(previsoes2$observado, previsoes2$previsto))
 ```
 
 ##  Modelo 3 - random forest
+
+Não é necessário normalizar os dados para algorítimos baseados em árvore de decisão, como o ramdom forest
 
 ``` {r}
 sample <- sample.int(n = nrow(data), size = floor(.7*nrow(data)), replace = F)

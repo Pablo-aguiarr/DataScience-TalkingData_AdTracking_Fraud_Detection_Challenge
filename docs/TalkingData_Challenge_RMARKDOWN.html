@@ -762,7 +762,13 @@ data_3$hour =NULL</code></pre>
 <h1><span class="header-section-number">5</span> Criação dos modelos de machine learning</h1>
 <div id="modelo-1-rede-neuralnn" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Modelo 1 :Rede Neural(NN)</h2>
-<pre class="r"><code>data_nn &lt;- data</code></pre>
+<p>Modelos de redes neurais requerem dados normalizados</p>
+<pre class="r"><code>data_nn &lt;- data
+min_max_norm &lt;- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+data_nn = min_max_norm(data_nn[,-&#39;is_attributed&#39;])
+data_nn$is_attributed = data$is_attributed</code></pre>
 <div id="divisão-dados-treino-e-teste" class="section level3" number="5.1.1">
 <h3><span class="header-section-number">5.1.1</span> Divisão dados treino e teste</h3>
 <pre class="r"><code>sample &lt;- sample.int(n = nrow(data_nn), size = floor(.7*nrow(data_nn)), replace = F)
@@ -788,26 +794,26 @@ previsoes$previsto &lt;- ifelse (previsoes$previsto &gt; 0.5, 1, 0)</code></pre>
 ## 
 ##    
 ##      0  1
-##   0 72  1
-##   1 49 15
+##   0 55 18
+##   1 13 51
 ##                                           
-##                Accuracy : 0.635           
-##                  95% CI : (0.5485, 0.7156)
-##     No Information Rate : 0.8832          
-##     P-Value [Acc &gt; NIR] : 1               
+##                Accuracy : 0.7737          
+##                  95% CI : (0.6945, 0.8408)
+##     No Information Rate : 0.5036          
+##     P-Value [Acc &gt; NIR] : 7.397e-11       
 ##                                           
-##                   Kappa : 0.2314          
+##                   Kappa : 0.5477          
 ##                                           
-##  Mcnemar&#39;s Test P-Value : 2.995e-11       
+##  Mcnemar&#39;s Test P-Value : 0.4725          
 ##                                           
-##             Sensitivity : 0.5950          
-##             Specificity : 0.9375          
-##          Pos Pred Value : 0.9863          
-##          Neg Pred Value : 0.2344          
-##              Prevalence : 0.8832          
-##          Detection Rate : 0.5255          
+##             Sensitivity : 0.8088          
+##             Specificity : 0.7391          
+##          Pos Pred Value : 0.7534          
+##          Neg Pred Value : 0.7969          
+##              Prevalence : 0.4964          
+##          Detection Rate : 0.4015          
 ##    Detection Prevalence : 0.5328          
-##       Balanced Accuracy : 0.7663          
+##       Balanced Accuracy : 0.7740          
 ##                                           
 ##        &#39;Positive&#39; Class : 0               
 ## </code></pre>
@@ -816,6 +822,8 @@ previsoes$previsto &lt;- ifelse (previsoes$previsto &gt; 0.5, 1, 0)</code></pre>
 <div id="modelo-2-rede-neural-com-menos-parâmetros" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Modelo 2: rede neural com menos parâmetros</h2>
 <pre class="r"><code>data_nn_2 &lt;- data_3
+data_nn_2 = min_max_norm(data_nn_2[,-&#39;is_attributed&#39;])
+data_nn_2$is_attributed = data_3$is_attributed
 
 
 sample &lt;- sample.int(n = nrow(data_nn_2), size = floor(.7*nrow(data_nn_2)), replace = F)
@@ -838,26 +846,26 @@ previsoes2$previsto &lt;- ifelse (previsoes2$previsto &gt; 0.5, 1, 0)</code></pr
 ## 
 ##    
 ##      0  1
-##   0 64  0
-##   1 64  9
+##   0 57  7
+##   1 31 42
 ##                                           
-##                Accuracy : 0.5328          
-##                  95% CI : (0.4457, 0.6185)
-##     No Information Rate : 0.9343          
-##     P-Value [Acc &gt; NIR] : 1               
+##                Accuracy : 0.7226          
+##                  95% CI : (0.6397, 0.7957)
+##     No Information Rate : 0.6423          
+##     P-Value [Acc &gt; NIR] : 0.0289103       
 ##                                           
-##                   Kappa : 0.1161          
+##                   Kappa : 0.4554          
 ##                                           
-##  Mcnemar&#39;s Test P-Value : 3.407e-15       
+##  Mcnemar&#39;s Test P-Value : 0.0001907       
 ##                                           
-##             Sensitivity : 0.5000          
-##             Specificity : 1.0000          
-##          Pos Pred Value : 1.0000          
-##          Neg Pred Value : 0.1233          
-##              Prevalence : 0.9343          
-##          Detection Rate : 0.4672          
+##             Sensitivity : 0.6477          
+##             Specificity : 0.8571          
+##          Pos Pred Value : 0.8906          
+##          Neg Pred Value : 0.5753          
+##              Prevalence : 0.6423          
+##          Detection Rate : 0.4161          
 ##    Detection Prevalence : 0.4672          
-##       Balanced Accuracy : 0.7500          
+##       Balanced Accuracy : 0.7524          
 ##                                           
 ##        &#39;Positive&#39; Class : 0               
 ## </code></pre>
@@ -865,6 +873,7 @@ previsoes2$previsto &lt;- ifelse (previsoes2$previsto &gt; 0.5, 1, 0)</code></pr
 </div>
 <div id="modelo-3---random-forest" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Modelo 3 - random forest</h2>
+<p>Não é necessário normalizar os dados para algorítimos baseados em árvore de decisão, como o ramdom forest</p>
 <pre class="r"><code>sample &lt;- sample.int(n = nrow(data), size = floor(.7*nrow(data)), replace = F)
 train_sample &lt;- data[sample, ]
 test_sample  &lt;- data[-sample, ]
